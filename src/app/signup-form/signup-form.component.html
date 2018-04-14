@@ -13,6 +13,9 @@
             <div *ngIf="username.errors.minlength">
                 User name field should have minimun {{ username.errors.minlength.requiredLength }}.
             </div>
+            <div *ngIf="username.errors.cannotContainSpace">
+                User name can not contain space.
+            </div>
         </div>
 
     </div>
