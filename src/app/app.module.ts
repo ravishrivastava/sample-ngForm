@@ -10,6 +10,7 @@ import { SignupFormComponent } from './signup-form/signup-form.component';
 import { NewCourseFormComponent } from './new-course-form/new-course-form.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { PostsComponent } from './posts/posts.component';
+import { PostService } from './services/post.service';
 
 
 @NgModule({
@@ -27,7 +28,7 @@ import { PostsComponent } from './posts/posts.component';
     BrowserModule,
     HttpModule
   ],
-  providers: [],
+  providers: [PostService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
