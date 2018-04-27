@@ -14,50 +14,59 @@ export class PostsComponent implements OnInit {
 
   constructor(private service: PostService) {
   }
-  
-  ngOnInit(){
+
+  ngOnInit() {
     this.service.getAll()
-    .subscribe(posts  =>  this.posts = posts);
+      .subscribe(posts => this.posts = posts);
   }
-  createPost(input: HTMLInputElement){
-    let post = {title: input.value };
+
+  createPost(input: HTMLInputElement) {
+    let post = { title: input.value };
+    this.posts.splice(0, 0, post)
+
     input.value = '';
+
     this.service.create(post)
-    .subscribe(newPost => {
-      post['id'] = newPost.id;
-      this.posts.splice(0,0,post)
-      console.log(newPost);
-    }, 
-    (error: AppError) => {
-      if(error instanceof BadInput){
-        // this.form.setErrors(error.originalError);
-      } else throw error;
-    });
+      .subscribe(newPost => {
+        post['id'] = newPost.id;
+        console.log(newPost);
+      },
+        (error: AppError) => {
+          this.posts.splice(0, 1);
+
+          if (error instanceof BadInput) {
+            // this.form.setErrors(error.originalError);
+          } else throw error;
+        });
 
   }
 
-  updatePost(post){
+  updatePost(post) {
     this.service.update(post)
-    .subscribe(updatedPost => {
-      console.log(updatedPost);
-    });
+      .subscribe(updatedPost => {
+        console.log(updatedPost);
+      });
   }
 
-  deletePost(post){
+  deletePost(post) {
+
+    let index = this.posts.indexOf(post);
+    this.posts.splice(index, 1);
+
     this.service.delete(post.id)
-    .subscribe(() => {
-      let index = this.posts.indexOf(post);
-      this.posts.splice(index,1)
-    }, 
-    (error: AppError )=> {
-      if(error instanceof NotFoundError){
-        alert("This post already deleted");
-      }
-      else throw error;
-    });
-  }
-  
+      .subscribe(
+        null,
+        (error: AppError) => {
+          this.posts.splice(index, 0, post);
 
-  
+          if (error instanceof NotFoundError) {
+            alert("This post already deleted");
+          }
+          else throw error;
+        });
+  }
+
+
+
 
 }
